@@ -1,0 +1,16 @@
+2026-06-05 13:40:27,963 - agent - INFO - vector_store.py:152 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\日常报销明细表.docx 加载成功，切片数：1
+2026-06-05 13:43:15,508 - agent - INFO - vector_store.py:136 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\日常报销明细表.docx 内容已经存在，跳过
+2026-06-05 13:51:59,712 - agent - INFO - vector_store.py:136 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\日常报销明细表.docx 内容已经存在，跳过
+2026-06-05 13:57:07,360 - agent - INFO - vector_store.py:152 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\周松松简历.docx 加载成功，切片数：10
+2026-06-05 13:57:07,362 - agent - INFO - vector_store.py:136 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\日常报销明细表.docx 内容已经存在，跳过
+2026-06-05 13:58:02,578 - agent - INFO - vector_store.py:136 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\周松松简历.docx 内容已经存在，跳过
+2026-06-05 13:58:02,579 - agent - INFO - vector_store.py:136 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\日常报销明细表.docx 内容已经存在，跳过
+2026-06-05 13:58:24,138 - agent - INFO - vector_store.py:136 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\周松松简历.docx 内容已经存在，跳过
+2026-06-05 13:58:24,139 - agent - INFO - vector_store.py:136 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\日常报销明细表.docx 内容已经存在，跳过
+2026-06-05 13:59:10,442 - agent - INFO - vector_store.py:136 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\周松松简历.docx 内容已经存在，跳过
+2026-06-05 13:59:10,443 - agent - INFO - vector_store.py:136 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\日常报销明细表.docx 内容已经存在，跳过
+2026-06-05 14:43:00,833 - agent - INFO - vector_store.py:136 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\周松松简历.docx 内容已经存在，跳过
+2026-06-05 14:43:00,834 - agent - INFO - vector_store.py:136 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\日常报销明细表.docx 内容已经存在，跳过
+2026-06-05 14:51:13,013 - agent - INFO - vector_store.py:136 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\周松松简历.docx 内容已经存在，跳过
+2026-06-05 14:51:13,014 - agent - INFO - vector_store.py:136 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\日常报销明细表.docx 内容已经存在，跳过
+2026-06-05 14:51:13,574 - agent - INFO - vector_store.py:152 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\uploads\5.29 Agentic RAG 需求文档_a5fc671c.docx 加载成功，切片数：2

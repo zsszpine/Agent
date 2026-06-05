@@ -1,0 +1,88 @@
+2026-05-20 14:52:20,888 - agent - ERROR - vector_store.py:154 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\uploads\2026年校级数学建模竞赛B题题目_e664bda7.pdf 加载失败：<ConnectionNotExistException: (code=1, message=should create connection first.)>
+Traceback (most recent call last):
+  File "C:\Users\zpine\PycharmProjects\Agent\RAG\rag\vector_store.py", line 150, in load_document
+    self.vector_store.add_documents(split_documents)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\zpine\AppData\Local\Programs\Python\Python314\Lib\site-packages\langchain_milvus\vectorstores\milvus.py", line 2303, in add_documents
+    return self.add_texts(texts, metadatas, **kwargs)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\zpine\AppData\Local\Programs\Python\Python314\Lib\site-packages\langchain_milvus\vectorstores\milvus.py", line 1402, in add_texts
+    return self.add_embeddings(
+           ~~~~~~~~~~~~~~~~~~~^
+        texts=texts,
+        ^^^^^^^^^^^^
+    ...<5 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "C:\Users\zpine\AppData\Local\Programs\Python\Python314\Lib\site-packages\langchain_milvus\vectorstores\milvus.py", line 1482, in add_embeddings
+    self._init(**kwargs)
+    ~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\zpine\AppData\Local\Programs\Python\Python314\Lib\site-packages\langchain_milvus\vectorstores\milvus.py", line 733, in _init
+    self._extract_fields()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\zpine\AppData\Local\Programs\Python\Python314\Lib\site-packages\langchain_milvus\vectorstores\milvus.py", line 1018, in _extract_fields
+    if isinstance(self.col, Collection):
+                  ^^^^^^^^
+  File "C:\Users\zpine\AppData\Local\Programs\Python\Python314\Lib\site-packages\langchain_milvus\vectorstores\milvus.py", line 580, in col
+    self._col_cache = Collection(self.collection_name, using=self.alias)
+                      ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\zpine\AppData\Local\Programs\Python\Python314\Lib\site-packages\pymilvus\decorators.py", line 202, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\zpine\AppData\Local\Programs\Python\Python314\Lib\site-packages\pymilvus\orm\collection.py", line 121, in __init__
+    conn, context = self._get_connection(**kwargs)
+                    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\zpine\AppData\Local\Programs\Python\Python314\Lib\site-packages\pymilvus\orm\collection.py", line 190, in _get_connection
+    handler = connections._fetch_handler(self._using)
+  File "C:\Users\zpine\AppData\Local\Programs\Python\Python314\Lib\site-packages\pymilvus\orm\connections.py", line 574, in _fetch_handler
+    raise ConnectionNotExistException(message=ExceptionsMessage.ConnectFirst)
+pymilvus.exceptions.ConnectionNotExistException: <ConnectionNotExistException: (code=1, message=should create connection first.)>
+2026-05-20 15:05:55,439 - agent - ERROR - vector_store.py:154 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\uploads\2026年校级数学建模竞赛B题题目_e664bda7.pdf 加载失败：<ConnectionNotExistException: (code=1, message=should create connection first.)>
+Traceback (most recent call last):
+  File "C:\Users\zpine\PycharmProjects\Agent\RAG\rag\vector_store.py", line 150, in load_document
+    self.vector_store.add_documents(split_documents)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\zpine\AppData\Local\Programs\Python\Python314\Lib\site-packages\langchain_milvus\vectorstores\milvus.py", line 2303, in add_documents
+    return self.add_texts(texts, metadatas, **kwargs)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\zpine\AppData\Local\Programs\Python\Python314\Lib\site-packages\langchain_milvus\vectorstores\milvus.py", line 1402, in add_texts
+    return self.add_embeddings(
+           ~~~~~~~~~~~~~~~~~~~^
+        texts=texts,
+        ^^^^^^^^^^^^
+    ...<5 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "C:\Users\zpine\AppData\Local\Programs\Python\Python314\Lib\site-packages\langchain_milvus\vectorstores\milvus.py", line 1482, in add_embeddings
+    self._init(**kwargs)
+    ~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\zpine\AppData\Local\Programs\Python\Python314\Lib\site-packages\langchain_milvus\vectorstores\milvus.py", line 733, in _init
+    self._extract_fields()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\zpine\AppData\Local\Programs\Python\Python314\Lib\site-packages\langchain_milvus\vectorstores\milvus.py", line 1018, in _extract_fields
+    if isinstance(self.col, Collection):
+                  ^^^^^^^^
+  File "C:\Users\zpine\AppData\Local\Programs\Python\Python314\Lib\site-packages\langchain_milvus\vectorstores\milvus.py", line 580, in col
+    self._col_cache = Collection(self.collection_name, using=self.alias)
+                      ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\zpine\AppData\Local\Programs\Python\Python314\Lib\site-packages\pymilvus\decorators.py", line 202, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\zpine\AppData\Local\Programs\Python\Python314\Lib\site-packages\pymilvus\orm\collection.py", line 121, in __init__
+    conn, context = self._get_connection(**kwargs)
+                    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\zpine\AppData\Local\Programs\Python\Python314\Lib\site-packages\pymilvus\orm\collection.py", line 190, in _get_connection
+    handler = connections._fetch_handler(self._using)
+  File "C:\Users\zpine\AppData\Local\Programs\Python\Python314\Lib\site-packages\pymilvus\orm\connections.py", line 574, in _fetch_handler
+    raise ConnectionNotExistException(message=ExceptionsMessage.ConnectFirst)
+pymilvus.exceptions.ConnectionNotExistException: <ConnectionNotExistException: (code=1, message=should create connection first.)>
+2026-05-20 15:07:31,552 - agent - INFO - vector_store.py:152 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\uploads\2026年校级数学建模竞赛B题题目_e664bda7.pdf 加载成功，切片数：12
+2026-05-20 15:09:12,385 - agent - INFO - vector_store.py:152 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\uploads\2026年校级数学建模竞赛A题题目_27917bc5.pdf 加载成功，切片数：11
+2026-05-20 15:09:12,386 - agent - INFO - vector_store.py:136 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\uploads\2026年校级数学建模竞赛B题题目_f9489264.pdf 内容已经存在，跳过
+2026-05-20 15:12:14,493 - agent - INFO - vector_store.py:136 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\uploads\2026年校级数学建模竞赛A题题目_27917bc5.pdf 内容已经存在，跳过
+2026-05-20 15:12:14,493 - agent - INFO - vector_store.py:136 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\uploads\2026年校级数学建模竞赛B题题目_f9489264.pdf 内容已经存在，跳过
+2026-05-20 15:14:05,936 - agent - INFO - vector_store.py:136 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\uploads\2026年校级数学建模竞赛A题题目_27917bc5.pdf 内容已经存在，跳过
+2026-05-20 15:14:05,936 - agent - INFO - vector_store.py:136 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\uploads\2026年校级数学建模竞赛B题题目_f9489264.pdf 内容已经存在，跳过
+2026-05-20 15:59:24,357 - agent - INFO - vector_store.py:152 - [加载知识库] C:\Users\zpine\PycharmProjects\Agent\RAG\data\uploads\2026年校级数学建模竞赛B题题目_f9489264.pdf 加载成功，切片数：12

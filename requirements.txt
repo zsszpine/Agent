@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+pydantic
+python-multipart
+pyyaml
+langchain
+langchain-community
+langchain-core
+langchain-openai
+langchain-milvus
+pymilvus
+langchain-text-splitters
+langchain-ollama
+dashscope
+pypdf

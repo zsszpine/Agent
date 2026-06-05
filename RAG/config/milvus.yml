@@ -1,0 +1,23 @@
+collection_name: agent
+
+# 独立 Milvus 服务地址。默认连接本机 Milvus。
+uri: http://localhost:19530
+token:
+auto_id: true
+drop_old: false
+
+k: 3
+data_path: data
+md5_hex_store: md5.text
+allow_knowledge_file_type: ["txt", "pdf", "md", "csv", "docx"]
+
+chunk_size: 200
+chunk_overlap: 20
+separators: ["\n\n", "\n", " ", "!", "?", ",", ".", "，", "。", "\r\n", "\r"]
+
+index_params:
+  metric_type: COSINE
+  index_type: AUTOINDEX
+
+search_params:
+  metric_type: COSINE
