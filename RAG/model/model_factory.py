@@ -5,7 +5,10 @@
 后续如果要从通义千问切到 OpenAI、Ollama 或其他模型，优先改这里。
 """
 
+import json
 import os
+import urllib.error
+import urllib.request
 from abc import ABC, abstractmethod
 from typing import Optional
 
@@ -17,6 +20,7 @@ from langchain_ollama import ChatOllama
 from langchain_openai import ChatOpenAI
 from langchain_openai.chat_models import base as openai_chat_base
 
+from rag.multimodal import decode_multimodal_page, image_to_data_url
 from utils.config_handler import rag_conf
 
 
@@ -72,7 +76,97 @@ class EmbeddingModelFactory(BaseModelFactory):
     """创建向量化模型。"""
 
     def generator(self) -> Optional[BaseChatModel | Embeddings]:
+        if rag_conf.get("embedding_provider", "dashscope") == "gme":
+            return GMEEmbeddings(
+                model=rag_conf["embedding_model_name"],
+                dimension=int(rag_conf.get("embedding_dimension", 1536)),
+                endpoint=rag_conf.get("gme_embedding_endpoint"),
+            )
         return DashScopeEmbeddings(model=rag_conf["embedding_model_name"])
+
+
+class GMEEmbeddings(Embeddings):
+    """HTTP wrapper for a 1536-dimension multimodal GME embedding endpoint."""
+
+    def __init__(self, model: str, dimension: int = 1536, endpoint: str | None = None):
+        self.model = model
+        self.dimension = dimension
+        self.endpoint = endpoint or os.environ.get("GME_EMBEDDING_ENDPOINT")
+        self.api_key = os.environ.get("GME_API_KEY") or os.environ.get("DASHSCOPE_API_KEY")
+        if not self.endpoint:
+            base_url = os.environ.get("GME_BASE_URL", "https://api.openai.com/v1")
+            self.endpoint = base_url.rstrip("/") + "/embeddings"
+
+    def embed_documents(self, texts: list[str]) -> list[list[float]]:
+        return [self._embed_one(text) for text in texts]
+
+    def embed_query(self, text: str) -> list[float]:
+        return self._embed_one(text)
+
+    def _embed_one(self, text: str) -> list[float]:
+        request = urllib.request.Request(
+            self.endpoint,
+            data=json.dumps(self._build_payload(text), ensure_ascii=False).encode("utf-8"),
+            headers=self._headers(),
+            method="POST",
+        )
+
+        try:
+            with urllib.request.urlopen(request, timeout=60) as response:
+                response_data = json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as exc:
+            body = exc.read().decode("utf-8", errors="replace")
+            raise RuntimeError(f"GME embedding request failed: {exc.code} {body}") from exc
+
+        vector = self._extract_embedding(response_data)
+        if len(vector) != self.dimension:
+            raise ValueError(
+                f"GME embedding dimension mismatch: expected {self.dimension}, got {len(vector)}"
+            )
+        return vector
+
+    def _headers(self) -> dict[str, str]:
+        headers = {"Content-Type": "application/json"}
+        if self.api_key:
+            headers["Authorization"] = f"Bearer {self.api_key}"
+        return headers
+
+    def _build_payload(self, text: str) -> dict:
+        payload = decode_multimodal_page(text)
+        if payload:
+            content = []
+            page_text = payload.get("text")
+            image_path = payload.get("image_path")
+            if page_text:
+                content.append({"type": "text", "text": page_text})
+            if image_path:
+                content.append(
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": image_to_data_url(image_path)},
+                    }
+                )
+            input_value = [{"content": content}]
+        else:
+            input_value = [text]
+
+        return {
+            "model": self.model,
+            "input": input_value,
+            "dimensions": self.dimension,
+        }
+
+    @staticmethod
+    def _extract_embedding(response_data: dict) -> list[float]:
+        if "data" in response_data:
+            first = response_data["data"][0]
+            if isinstance(first, dict) and "embedding" in first:
+                return first["embedding"]
+        if "embedding" in response_data:
+            return response_data["embedding"]
+        if "embeddings" in response_data:
+            return response_data["embeddings"][0]
+        raise ValueError(f"Unsupported GME embedding response: {response_data}")
 
 
 class Mimo(BaseModelFactory):

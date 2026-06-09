@@ -23,7 +23,6 @@ from zoneinfo import ZoneInfo
 
 from langchain_core.tools import tool
 
-from rag.agentic_rag_service import AgenticRagService
 from rag.rag_service import RagService
 from rag.vector_store import VectorStoreService
 from utils.config_handler import agent_conf
@@ -38,12 +37,12 @@ KNOWLEDGE_ROOT = Path(get_abs_path("data")).resolve()
 MAX_TOOL_TEXT_CHARS = 12000
 
 
-def get_rag_service() -> AgenticRagService:
+def get_rag_service() -> RagService:
     """首次调用 RAG 工具时再连接向量库，避免服务启动强依赖 Milvus。"""
 
     global rag
     if rag is None:
-        rag = AgenticRagService()
+        rag = RagService()
     return rag
 
 # 示例项目里用随机数据模拟「用户系统」和「时间系统」。
@@ -69,7 +68,7 @@ MONTHS = [
 def rag_summarize(query: str) -> str:
     """RAG 工具：把用户问题交给检索链，返回基于资料的总结。"""
 
-    return get_rag_service().service.retrieve_docs(query)
+    return get_rag_service().rag_summarize(query)
 
 
 @tool(description="获取当前日期和时间。timezone 默认 Asia/Shanghai，可传 UTC、Asia/Shanghai、America/New_York 等 IANA 时区名。")

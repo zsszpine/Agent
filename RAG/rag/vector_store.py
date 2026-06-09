@@ -23,7 +23,7 @@ from utils.file_handler import (
     docx_loader,
     get_file_md5_hex,
     listdir_with_allowed_type,
-    pdf_loader,
+    pdf_page_image_loader,
     txt_loader,
 )
 from utils.logger_handler import logger
@@ -118,12 +118,20 @@ class VectorStoreService:
         def get_file_documents(read_path: str) -> list[Document]:
             suffix = os.path.splitext(read_path)[1].lower()
             if suffix == ".pdf":
-                return pdf_loader(read_path)
+                return pdf_page_image_loader(
+                    read_path,
+                    dpi=int(milvus_conf.get("pdf_render_dpi", 500)),
+                )
             if suffix == ".docx":
                 return docx_loader(read_path)
             if suffix in {".txt", ".md", ".csv"}:
                 return txt_loader(read_path)
             return []
+
+        def prepare_documents(read_path: str, documents: list[Document]) -> list[Document]:
+            if os.path.splitext(read_path)[1].lower() == ".pdf":
+                return documents
+            return self.splitter.split_documents(documents)
 
         allowed_files_path = listdir_with_allowed_type(
             milvus_conf["data_path"],
@@ -142,7 +150,7 @@ class VectorStoreService:
                     logger.warning(f"[加载知识库] {file} 没有有效文本，跳过")
                     continue
 
-                split_documents = self.splitter.split_documents(documents)
+                split_documents = prepare_documents(file, documents)
                 if not split_documents:
                     logger.warning(f"[加载知识库] {file} 切片后没有有效文本，跳过")
                     continue

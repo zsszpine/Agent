@@ -1,2 +1,5 @@
 chat_model_name : qwen3-max
-embedding_model_name : text-embedding-v4
+embedding_provider: gme
+embedding_model_name: gme-Qwen2-VL-2B-Instruct
+embedding_dimension: 1536
+gme_embedding_endpoint:

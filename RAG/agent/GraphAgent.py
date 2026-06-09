@@ -13,6 +13,7 @@ LangGraph Agent 编排层。
 import json
 from datetime import time
 from pathlib import Path
+from typing import Any
 from langchain_core.messages import HumanMessage, SystemMessage, RemoveMessage, ToolMessage
 from langchain_core.messages.base import message_to_dict
 from langgraph.checkpoint.memory import MemorySaver
@@ -50,6 +51,7 @@ from agent.tools import (
     text_statistics,
 )
 from model.model_factory import Mimo_model,chat_model
+from rag.multimodal import image_to_data_url
 from utils.prompt_loader import load_main_prompts
 
 WORKDIR = Path.cwd()
@@ -279,13 +281,35 @@ class GraphAgent:
         # MemorySaver 是内存级会话记忆。生产环境通常会换成 Redis、Postgres 等持久化 checkpointer。
         return builder.compile(checkpointer=MemorySaver())
 
-    def build_messages(self, query: str):
+    def _build_human_content(self, query: str | dict[str, Any]):
+        if isinstance(query, str):
+            return query
+
+        text = str(query.get("text") or query.get("message") or "")
+        content: list[dict[str, Any]] = [{"type": "text", "text": text}]
+
+        for image_url in query.get("image_urls") or []:
+            content.append({"type": "image_url", "image_url": {"url": image_url}})
+
+        for image_path in query.get("image_paths") or []:
+            path = Path(image_path).resolve()
+            if not path.exists():
+                continue
+            if WORKDIR not in path.parents and path != WORKDIR:
+                continue
+            content.append(
+                {"type": "image_url", "image_url": {"url": image_to_data_url(str(path))}}
+            )
+
+        return content
+
+    def build_messages(self, query: str | dict[str, Any]):
         """把系统提示词和用户问题组合成 LangChain messages。"""
 
         return {
             "messages": [
                 SystemMessage(content=load_main_prompts()),
-                HumanMessage(content=query),
+                HumanMessage(content=self._build_human_content(query)),
             ]
         }
 
@@ -336,5 +360,3 @@ if __name__ == "__main__":
     #
     # result = graph.invoke(agent.build_messages("扫地机器人建图不完整、地图错乱怎么办？"), config)
     # print(result)
-
-

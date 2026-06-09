@@ -62,6 +62,8 @@ class ChatRequest(BaseModel):
 
     message: str = Field(..., min_length=1, description="用户输入的问题")
     thread_id: str = Field("web-demo", description="LangGraph 会话 ID")
+    image_urls: list[str] = Field(default_factory=list, description="Optional image URLs or data URLs")
+    image_paths: list[str] = Field(default_factory=list, description="Optional local image paths under workspace")
 
 
 class ChatResponse(BaseModel):
@@ -265,7 +267,14 @@ async def agent(data: ChatRequest):
 
     try:
         graph_agent = GraphAgent()
-        result = graph_agent.execute_values(data.message, thread_id=data.thread_id)
+        agent_input: str | dict = data.message
+        if data.image_urls or data.image_paths:
+            agent_input = {
+                "text": data.message,
+                "image_urls": data.image_urls,
+                "image_paths": data.image_paths,
+            }
+        result = graph_agent.execute_values(agent_input, thread_id=data.thread_id)
         reply = result["messages"][-1].content
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Agent 调用失败：{exc}") from exc

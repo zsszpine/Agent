@@ -15,6 +15,30 @@
 pip install -r requirements.txt
 ```
 
+## 多模态 RAG 配置
+
+当前 RAG 已切换为多模态入库：
+
+- PDF 会通过 PyMuPDF 按页渲染为 `500DPI` PNG，缓存到 `RAG/data/.rendered_pages`。
+- 每个 PDF 页面作为一个检索单元入库，页面文本和 PNG 会一起用于 GME 向量化。
+- GME embedding 统一校验为 `1536` 维；如果接口返回维度不一致，会拒绝写入。
+- 检索命中 PDF 页面后，RAG 生成阶段会把页面 PNG 作为 Mimo 的 `image_url` 多模态输入。
+
+环境变量示例：
+
+```powershell
+set MIMO_API_KEY=你的_mimo_key
+set GME_API_KEY=你的_gme_key
+set GME_EMBEDDING_ENDPOINT=https://你的-gme-endpoint/v1/embeddings
+```
+
+如果从旧的文本 embedding collection 切换过来，先清空 Milvus 再重建，避免旧向量维度和 1536 维 GME 向量不一致：
+
+```bash
+curl -X POST http://127.0.0.1:8000/knowledge/clear
+curl -X POST http://127.0.0.1:8000/knowledge/rebuild
+```
+
 如果只想单独安装 Milvus 相关包：
 
 ```bash

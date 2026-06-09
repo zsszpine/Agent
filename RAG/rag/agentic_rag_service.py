@@ -7,9 +7,11 @@ from pydantic import BaseModel, Field
 from langchain_openai import ChatOpenAI
 from rag.vector_store import VectorStoreService
 from langchain_core.output_parsers import StrOutputParser
+from langchain_core.messages import HumanMessage
 from typing import List
 from langchain_community.tools.tavily_search import TavilySearchResults
 from langchain_core.documents import Document
+from rag.multimodal import build_context_text, build_multimodal_human_content, document_text
 
 from typing_extensions import TypedDict
 ### from langchain_cohere import CohereEmbeddings
@@ -123,7 +125,7 @@ def grade_documents(state):
     filtered_docs = []
     for d in documents:
         score = retrieval_grader.invoke(
-            {"question": question, "document": d.page_content}
+            {"question": question, "document": document_text(d)}
         )
         grade = score.binary_score
         if grade == "yes":
@@ -169,19 +171,19 @@ def generate(state):
     # LLM
     llm = Mimo_model
 
-    # Post-processing
-    def format_docs(docs):
-        return "\n\n".join(doc.page_content for doc in docs)
-
-    # Chain
-    rag_chain = prompt | llm | StrOutputParser()
-
     print("---GENERATE---")
     question = state["question"]
     documents = state["documents"]
 
     # RAG generation
-    generation = rag_chain.invoke({"context": documents, "question": question})
+    rendered_prompt = prompt.format(
+        context=build_context_text(documents),
+        question=question,
+    )
+    response = llm.invoke(
+        [HumanMessage(content=build_multimodal_human_content(rendered_prompt, documents))]
+    )
+    generation = response.content
     return {"documents": documents, "question": question, "generation": generation}
 
 
